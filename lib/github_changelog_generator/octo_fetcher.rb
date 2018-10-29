@@ -10,7 +10,7 @@ module GitHubChangelogGenerator
   # fetcher = GitHubChangelogGenerator::OctoFetcher.new(options)
   class OctoFetcher
     PER_PAGE_NUMBER   = 100
-    MAX_THREAD_NUMBER = 10
+    MAX_THREAD_NUMBER = 5
     MAX_FORBIDDEN_RETRIES = 100
     CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
     GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, changelog may be " \
@@ -417,14 +417,14 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         on: [Octokit::Forbidden],
         tries: MAX_FORBIDDEN_RETRIES,
         base_interval: sleep_base_interval,
-        multiplier: 1.0,
-        rand_factor: 0.0,
+        multiplier: 1.5,
+        rand_factor: 0.25,
         on_retry: retry_callback
       }
     end
 
     def sleep_base_interval
-      1.0
+      2.0
     end
 
     def retry_callback
